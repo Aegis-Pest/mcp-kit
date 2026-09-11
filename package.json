@@ -1,0 +1,83 @@
+{
+  "name": "@aegis-pest/mcp-kit",
+  "version": "1.0.0",
+  "description": "Building blocks for Model Context Protocol servers: HTTP/SSE transport with bearer auth, signed-context identity (Ed25519 / HS256), token-bucket rate limiting, secret-redacting structured logs, and a typed tool-handler wrapper.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "sse",
+    "jwt",
+    "ed25519",
+    "rbac",
+    "rate-limiter",
+    "logging"
+  ],
+  "license": "Apache-2.0",
+  "author": "Aegis Pest Solutions LLC",
+  "homepage": "https://github.com/Aegis-Pest/mcp-kit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aegis-Pest/mcp-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Aegis-Pest/mcp-kit/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "check:pack": "node scripts/check-pack.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "jose": "^6.2.3",
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "@modelcontextprotocol/sdk": "^1.23.0"
+  },
+  "peerDependenciesMeta": {
+    "@modelcontextprotocol/sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^4.1.0"
+  }
+}
