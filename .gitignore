@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+*.tgz
+
+# Never commit environment files: signing keys live in a secrets manager.
+.env
+.env.*
+!.env.example

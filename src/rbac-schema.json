@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Aegis-Pest/mcp-kit/blob/main/src/rbac-schema.json",
+  "title": "McpToolContext",
+  "description": "The `_context` object every MCP tool call carries: who is calling, on behalf of which tenant, and what they may do. Language-neutral form of the TypeScript `McpToolContext` type and the `contextSchema` Zod validator; signers in other languages mint the signed-context token from the same fields.",
+  "type": "object",
+  "required": ["tenant_id", "user_id", "role_name", "permissions"],
+  "properties": {
+    "tenant_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The tenant (organisation) the call is scoped to."
+    },
+    "user_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The end user the call is made on behalf of."
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Optional display/lookup email for the user. Informational; never an authorization input."
+    },
+    "role_name": {
+      "type": "string",
+      "description": "The user's role within the tenant, e.g. owner, admin, tech."
+    },
+    "request_id": {
+      "type": "string",
+      "description": "Correlation id for logs; echoed as `rid` in the signed token."
+    },
+    "permissions": {
+      "type": "array",
+      "description": "Effective grants. `requirePermission()` checks resource+action+granted.",
+      "items": {
+        "type": "object",
+        "required": ["resource", "action", "granted"],
+        "properties": {
+          "id": { "type": "string" },
+          "role_id": { "type": "string" },
+          "resource": {
+            "type": "string",
+            "enum": [
+              "contacts",
+              "jobs",
+              "financials",
+              "internal_notes",
+              "external_notes",
+              "scheduling",
+              "reports",
+              "admin",
+              "email",
+              "issues",
+              "receipts",
+              "inventory"
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "view",
+              "add",
+              "modify",
+              "delete",
+              "send",
+              "manage",
+              "submit",
+              "submit_card",
+              "submit_reimbursement",
+              "use_shared_card",
+              "review",
+              "post",
+              "view_own",
+              "view_all"
+            ]
+          },
+          "granted": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "scopes": {
+      "type": "array",
+      "description": "Row-level visibility limits (which company/property/unit the user may see). Empty or absent means the role decides.",
+      "items": {
+        "type": "object",
+        "required": ["scope_type", "scope_ref_id", "fieldwork_entity"],
+        "properties": {
+          "id": { "type": "string" },
+          "user_id": { "type": "string" },
+          "scope_type": {
+            "type": "string",
+            "enum": ["all", "company", "property", "unit"]
+          },
+          "scope_ref_id": { "type": "string" },
+          "fieldwork_entity": {
+            "type": "string",
+            "description": "The entity type `scope_ref_id` refers to in the field-service system of record."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "credentials": {
+      "type": "object",
+      "description": "Runtime API material forwarded to the server (delegated OAuth tokens, app passwords, allowlists). String values only. Carried unsigned EXCEPT the SIGNED_CREDENTIAL_KEYS, which are accepted only from the signed token under enforcement.",
+      "additionalProperties": { "type": "string" }
+    },
+    "_token": {
+      "type": "string",
+      "description": "Signed-context JWT (EdDSA or HS256) over the authorization fields above. Required when the server enforces signatures; its presence alone confers no trust."
+    }
+  },
+  "additionalProperties": false
+}
