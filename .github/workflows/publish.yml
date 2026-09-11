@@ -8,10 +8,13 @@ name: Publish to npm
 #      npmjs.com if it does not exist yet: Add Organization -> free public org.
 #   2. Do the FIRST publish by hand from a clean checkout of the tagged commit,
 #      because a trusted publisher can only be attached to a package that
-#      already exists on the registry:
+#      already exists on the registry. Provenance can only be generated inside
+#      a supported CI runner, so the hand publish must switch it off (the CLI
+#      flag overrides `publishConfig.provenance`; every later CI release keeps
+#      it on):
 #        npm login
 #        npm ci && npm run typecheck && npm run lint && npm test
-#        npm publish --access public --provenance
+#        npm publish --access public --no-provenance
 #   3. On npmjs.com -> the package -> Settings -> Trusted Publisher -> GitHub
 #      Actions: organization `Aegis-Pest`, repository `mcp-kit`, workflow
 #      filename `publish.yml`, environment left blank. Save.
