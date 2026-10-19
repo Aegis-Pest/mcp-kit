@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "jose": "^6.2.3",
-    "zod": "^4.3.6"
+    "zod": "^4.6.7"
   },
   "peerDependencies": {
     "@modelcontextprotocol/sdk": "^1.23.0"
