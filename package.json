@@ -59,7 +59,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "jose": "^6.2.3",
+    "jose": "^6.2.13",
     "zod": "^4.3.6"
   },
   "peerDependencies": {
